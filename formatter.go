@@ -3,6 +3,7 @@ package srslog
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -41,8 +42,8 @@ func RFC3164Formatter(p Priority, hostname, tag, content string) string {
 
 // if string's length is greater than max, then use the last part
 func truncateStartStr(s string, max int) string {
-	if (len(s) > max) {
-		return s[len(s) - max:]
+	if len(s) > max {
+		return s[len(s)-max:]
 	}
 	return s
 }
@@ -51,8 +52,9 @@ func truncateStartStr(s string, max int) string {
 func RFC5424Formatter(p Priority, hostname, tag, content string) string {
 	timestamp := time.Now().Format(time.RFC3339)
 	pid := os.Getpid()
-	appName := truncateStartStr(os.Args[0], appNameMaxLength)
+	appName := filepath.Base(os.Args[0])
+	appNameTruncated := truncateStartStr(appName, appNameMaxLength)
 	msg := fmt.Sprintf("<%d>%d %s %s %s %d %s - %s",
-		p, 1, timestamp, hostname, appName, pid, tag, content)
+		p, 1, timestamp, hostname, appNameTruncated, pid, tag, content)
 	return msg
 }
