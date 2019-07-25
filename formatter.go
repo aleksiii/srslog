@@ -54,7 +54,7 @@ func RFC5424Formatter(p Priority, hostname, tag, content string) string {
 	pid := os.Getpid()
 	appName := filepath.Base(os.Args[0])
 	appNameTruncated := truncateStartStr(appName, appNameMaxLength)
-	msg := fmt.Sprintf("<%d>%d %s %s %s %d %s - %s",
+	msg := fmt.Sprintf("<%d>%d %s %s %s %d %s %s",
 		p, 1, timestamp, hostname, appNameTruncated, pid, tag, content)
 	return msg
 }
